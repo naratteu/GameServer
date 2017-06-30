@@ -21,8 +21,7 @@ func NewVisitor(id int, conn net.Conn) *Visitor {
 }
 
 func (v *Visitor) BrodeCast() {
-	v.conn[1].Write
-
+	BrodeCast <- "#BrodeCast!;"
 }
 
 func (v *Visitor) GoHandleREQ() {
@@ -38,7 +37,6 @@ func (v *Visitor) GoHandleREQ() {
 		}
 		fmt.Println(string(v.Id) + "가 보냄 : " + string(buf[:len])) // 데이터 출력
 
-		json
 		v.Conn.Write(buf)
 		fmt.Println("반환해줌")
 
