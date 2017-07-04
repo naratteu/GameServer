@@ -24,29 +24,22 @@ func main() {
 	fmt.Println("서버 리슨시작 포트번호 : " + port)
 	count := 0
 	for {
-
-		s : select {
+		select {
 		case b := <-BrodeCast:
+			fmt.Println("BrodeCast : "+b);
+			for _, v := range Visitors { v.Conn.Write([]byte(b)) }
+			time.Sleep(0) //100 * time.Millisecond)
+		case conn, errAc := listener.Accept() :
+			if errAc != nil {
+				//어셉트한게 오류있으면 이건 짜르고 다시반복
+				fmt.Println("Connection accepting failed.")
+				conn.Close()
+				continue
+			}
 
-		default:
-				break s;
-
+			count++
+			Visitors[count] = NewVisitor(count,conn)
 		}
-
-		conn, errAc := listener.Accept()
-		if errAc != nil {
-			//어셉트한게 오류있으면 이건 짜르고 다시반복
-			fmt.Println("Connection accepting failed.")
-			conn.Close()
-			time.Sleep(0)
-			continue
-		}
-
-		count++
-		Visitors[count] = NewVisitor(count,conn)
-
 		time.Sleep(0) //100 * time.Millisecond)
 	}
 }
-
-func

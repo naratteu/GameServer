@@ -37,8 +37,7 @@ func (v *Visitor) GoHandleREQ() {
 		}
 		fmt.Println(string(v.Id) + "가 보냄 : " + string(buf[:len])) // 데이터 출력
 
-		v.Conn.Write(buf)
-		fmt.Println("반환해줌")
+		BrodeCast <- string(buf[:len])
 
 		time.Sleep(0)
 	}
