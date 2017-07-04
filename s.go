@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	Visitors  = make(map[int]Visitor)
+	Visitors  = make(map[int]*Visitor)
 	BrodeCast = make(chan string)
 )
 
@@ -24,18 +24,29 @@ func main() {
 	fmt.Println("서버 리슨시작 포트번호 : " + port)
 	count := 0
 	for {
+
+		s : select {
+		case b := <-BrodeCast:
+
+		default:
+				break s;
+
+		}
+
 		conn, errAc := listener.Accept()
 		if errAc != nil {
 			//어셉트한게 오류있으면 이건 짜르고 다시반복
 			fmt.Println("Connection accepting failed.")
 			conn.Close()
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(0)
 			continue
 		}
 
 		count++
-		Visitors[count] = NewVisitor(count, conn)
+		Visitors[count] = NewVisitor(count,conn)
 
 		time.Sleep(0) //100 * time.Millisecond)
 	}
 }
+
+func
